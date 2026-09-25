@@ -2,15 +2,16 @@
 
 Файл ведёт OpenCode по вашим запросам. Агент записывает фактические результаты экспериментов и вносит изменения в связанные файлы. Свою оценку сообщайте ему в чате; вручную заполнять шаблон не нужно.
 
-- Выбранный слабый артефакт Практики 1:
-- Что в нём нужно улучшить:
-- Как поймём, что изменение полезно:
+- Выбранный слабый артефакт Практики 1: `tests_load.md` + метрики `problem.md`
+- Что в нём нужно улучшить: числа взяты из головы (10 RPS, p95<12s, килобайты вместо символов лимита), у метрик нет текущих значений — пороги нечем проверить
+- Как поймём, что изменение полезно: каждый порог ссылается на правило (`API-1`/`REL-1`) или способ замера, а что подтвердить нельзя — выкинуто с записью
+- Оценка пользователя (из диалога): все 6 экспериментов приняты, отклонённые пункты подтверждены
 
 | Техника | Файл эксперимента | Изменённый файл Практики 1 | Конкретное изменение | Проверка | Что отклонили |
 |---|---|---|---|---|---|
-| Few-shot | [`few_shot/experiment.md`](few_shot/experiment.md) |  |  |  |  |
-| R.C.T.F. | [`rctf/experiment.md`](rctf/experiment.md) |  |  |  |  |
-| Chain of Verification | [`chain_of_verification/experiment.md`](chain_of_verification/experiment.md) |  |  |  |  |
-| Tree of Thoughts | [`tree_of_thoughts/experiment.md`](tree_of_thoughts/experiment.md) |  |  |  |  |
-| RAG | [`rag/experiment.md`](rag/experiment.md) |  |  |  |  |
-| ReAct | [`react/experiment.md`](react/experiment.md) |  |  |  |  |
+| Few-shot | [`few_shot/experiment.md`](few_shot/experiment.md) | `practices/practice_01/tests_load.md`, таблица | У каждого порога дописаны правило (`REL-1`, `API-1`) и способ (мок, лог) | Прошелся по ячейкам: у каждого числа есть правило или пометка | 50 RPS без квоты |
+| R.C.T.F. | [`rctf/experiment.md`](rctf/experiment.md) | `practices/practice_01/tests_load.md`, «Что измеряем» | Вместо названий метрик — критерии пройден/провален | Ячейка читается как «прошел/нет» без додумывания | SLO 99.9% без источника |
+| Chain of Verification | [`chain_of_verification/experiment.md`](chain_of_verification/experiment.md) | `practices/practice_01/problem.md`, «Метрики» | Вписаны текущие `0/6 → 3/3` и `0 → 1/1`, цель — удержание | Значения посчитаны по `P1-01/P1-02`, не выдуманы | Метрика «среднее время ревью» |
+| Tree of Thoughts | [`tree_of_thoughts/experiment.md`](tree_of_thoughts/experiment.md) | `practices/practice_01/tests_load.md`, абзац под таблицей | Выбор: мок сейчас, живое при квоте; C отвергнута как самообман | Критерии стоимость/воспроизводимость/честность применены | Вариант C, «тихий» живой прогон |
+| RAG | [`rag/experiment.md`](rag/experiment.md) | `practices/practice_01/tests_load.md`, «Граничный размер» | `19KB/21KB` → `19 000/21 000 символов` (единицы сошлись с `API-1`) | Каждое число сверено с 3 источниками, `CASE.md` исключен | Килобайты как единица лимита |
+| ReAct | [`react/experiment.md`](react/experiment.md) | `practices/practice_01/tests_integration.md`, строка api→service | Три входа с кодами + связка с `tests_load`; стоп на 3 шаге из 4 | Каждый вход traced до `api.py:36-37` | 4-й шаг «прогнать живое» |
